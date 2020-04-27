@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
 
+  before_action :login_check_user
+  # , only: [:new,:create,:show,:edit,:update]
+
   def new
   	@user = User.new
   end
@@ -7,7 +10,8 @@ class UsersController < ApplicationController
   def create
   	@user = User.new(user_params)
   	if @user.save
-    	redirect_to user_path(@user.id)
+      session[:user_id] = @user.id
+      redirect_to blogs_path
     else
       render :new
     end
@@ -36,4 +40,9 @@ class UsersController < ApplicationController
                                  :password_confirmation)
   end
 
+  def login_check_user
+    unless logged_in?
+      redirect_to root_path
+    end
+  end
 end

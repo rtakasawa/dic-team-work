@@ -1,5 +1,6 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:edit, :update, :destroy, :show]
+  before_action :login_check_blogs, only: [:new, :create, :edit, :update, :destroy, :show]
   def index
     @blogs = Blog.all
   end
@@ -28,7 +29,6 @@ class BlogsController < ApplicationController
 
   def edit
     if current_user.id == @blog.user.id
-      @blog.image.cache! unless @blog.image.blank? 
     else
       redirect_to blogs_path, flash: {danger: "自分の記事以外の編集は出来ません"}
     end
@@ -47,27 +47,36 @@ class BlogsController < ApplicationController
   end
 
   def destroy
-    @blog.destroy
-    redirect_to blogs_path, flash: {danger: "ブログを削除しました"}
+    if current_user.id == @blog.user.id
+      @blog.destroy
+      redirect_to blogs_path, flash: {danger: "ブログを削除しました"}
+    else
+      redirect_to blogs_path, flash: {danger: "自分の記事以外の削除は出来ません"}
+    end
   end
 
   def show
-    @favorite = current_user.favorites.find_by(blog_id: @blog.id)
   end
 
-  def confirm
-    @blog = current_user.blogs.build(blog_params)
-    @blog.id = params[:id]
-    render :new if @blog.invalid?
-  end
+  # def confirm
+  #   @blog = current_user.blogs.build(blog_params)
+  #   @blog.id = params[:id]
+  #   render :new if @blog.invalid?
+  # end
 
   private
 
   def blog_params
-    params.require(:blog).permit(:id, :content, :image, :image_cache)
+    params.require(:blog).permit(:id, :title, :content, )
   end
 
   def set_blog
     @blog = Blog.find(params[:id])
+  end
+
+  def login_check_blogs
+    unless logged_in?
+      redirect_to blogs_path
+    end
   end
 end

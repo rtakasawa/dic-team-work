@@ -1,3 +1,4 @@
 <h1><%= @user.name %>のページ</h1>
 <p>メールアドレス: <%= @user.email %></p>
-<%= link_to "編集する", edit_user_path(@user) %>
+<%= link_to "編集する", edit_user_path(@user) %>|
+<%= link_to '戻る', blogs_path %>
