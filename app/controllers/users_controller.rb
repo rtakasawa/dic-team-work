@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
-
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def new
   	@user = User.new
@@ -23,10 +22,15 @@ class UsersController < ApplicationController
 
   def update
   	if @user.update(user_params)
-			redirect_to user_path(@user.id), notice: "編集しました！"
+			redirect_to user_path(@user.id), flash: { notice: "プロフィールを編集しました" }
 		else
 			render :edit
 		end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to blogs_path, flash: { notice: "ユーザーを削除しました" }
   end
   
   private
