@@ -1,0 +1,10 @@
+<%= link_to "ユーザー登録",new_user_path %>
+
+<h1>ログイン画面</h1>
+<%= form_with(scope: :session, url: sessions_path, local: true) do |f| %>
+  <%= f.label :"メールアドレス" %>
+  <%= f.email_field :email %>
+  <%= f.label :"パスワード" %>
+  <%= f.password_field :password %>
+  <%= f.submit "ログイン" %>
+<% end %>
