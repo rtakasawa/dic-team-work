@@ -1,6 +1,7 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:edit, :update, :destroy, :show]
-  before_action :login_check_blogs, only: [:new, :create, :edit, :update, :destroy, :show]
+  before_action :login_check, only: [:new, :create, :edit, :update, :destroy, :show]
+
   def index
     @blogs = Blog.all
   end
@@ -55,28 +56,14 @@ class BlogsController < ApplicationController
     end
   end
 
-  def show
-  end
-
-  # def confirm
-  #   @blog = current_user.blogs.build(blog_params)
-  #   @blog.id = params[:id]
-  #   render :new if @blog.invalid?
-  # end
+  def show; end
 
   private
-
   def blog_params
     params.require(:blog).permit(:id, :title, :content, )
   end
 
   def set_blog
     @blog = Blog.find(params[:id])
-  end
-
-  def login_check_blogs
-    unless logged_in?
-      redirect_to blogs_path
-    end
   end
 end
