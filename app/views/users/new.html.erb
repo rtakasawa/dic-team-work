@@ -1,4 +1,4 @@
-<h1>Sign up</h1>
+<h1>ユーザー登録</h1>
 <% if @user.errors.any? %>
   <div id="error_explanation">
     <h2><%= pluralize(@user.errors.count, "error") %> prohibited this <%= @user.name %> from being saved:</h2>
@@ -18,5 +18,5 @@
   <%= f.password_field :password %>
   <%= f.label :password_confirmation %>
   <%= f.password_field :password_confirmation %>
-  <%= f.submit "Create my account" %>
+  <%= f.submit "アカウントをつくる" %>
 <% end %>
