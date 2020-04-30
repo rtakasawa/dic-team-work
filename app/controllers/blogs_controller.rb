@@ -1,6 +1,7 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:edit, :update, :destroy, :show]
   before_action :login_check, only: [:new, :create, :edit, :update, :destroy, :show]
+  before_action :my_blog_check,  only: [:edit, :update, :destroy]
 
   def index
     @blogs = Blog.all
@@ -46,5 +47,10 @@ class BlogsController < ApplicationController
 
   def set_blog
     @blog = Blog.find(params[:id])
+  end
+
+  def my_blog_check
+    set_blog
+    redirect_to root_path unless current_user.id == @blog.user.id
   end
 end
