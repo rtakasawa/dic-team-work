@@ -15,6 +15,8 @@
   <%= @blog.user.name %>
 </p>
 
-<%= link_to '編集', edit_blog_path(@blog) %> |
-<%= link_to '削除', @blog, method: :delete, data: { confirm: '本当に削除してよろしいですか?' } %> |
+<% if current_user.id == @blog.user.id %>
+  <%= link_to '編集', edit_blog_path(@blog) %> |
+  <%= link_to '削除', @blog, method: :delete, data: { confirm: '本当に削除してよろしいですか?' } %> |
+<% end %>
 <%= link_to '戻る', blogs_path %>
