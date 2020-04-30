@@ -7,53 +7,34 @@ class BlogsController < ApplicationController
   end
   
   def new
-    if params[:back]
-      @blog = current_user.blogs.build(blog_params)
-      render 'new'
-    else
-      @blog = Blog.new
-    end
+    @blog = Blog.new
   end
 
   def create
     @blog = current_user.blogs.build(blog_params)
-    if params[:back]
-      render 'new'
+    if @blog.save
+      redirect_to blogs_path, flash: {success: "ブログを作成しました"}
     else
-      if @blog.save
-        redirect_to blogs_path, flash: {success: "ブログを作成しました"}
-      else
-        render :new
-      end
+      render :new
     end
   end
 
   def edit
-    if current_user.id == @blog.user.id
-    else
-      redirect_to blogs_path, flash: {danger: "自分の記事以外の編集は出来ません"}
-    end
+    current_user.id == @blog.user.id
   end
 
   def update
-    if params[:back]
-      render :edit
+    if @blog.update(blog_params)
+      redirect_to blogs_path, flash: {success: "ブログを編集しました"}
     else
-      if @blog.update(blog_params)
-        redirect_to blogs_path, flash: {success: "ブログを編集しました"}
-      else
-        render :edit
-      end
+      render :edit
     end
   end
 
   def destroy
-    if current_user.id == @blog.user.id
-      @blog.destroy
-      redirect_to blogs_path, flash: {danger: "ブログを削除しました"}
-    else
-      redirect_to blogs_path, flash: {danger: "自分の記事以外の削除は出来ません"}
-    end
+    current_user.id == @blog.user.id
+    @blog.destroy
+    redirect_to blogs_path, flash: {danger: "ブログを削除しました"}
   end
 
   def show; end
