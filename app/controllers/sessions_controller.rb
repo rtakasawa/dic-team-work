@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       session[:user_id] = user.id
-      redirect_to blogs_path
+      redirect_to root_path
       #リダイレクト先をユーザーのプロフィールページへ変更
       # redirect_to user_path(user.id)
     else
